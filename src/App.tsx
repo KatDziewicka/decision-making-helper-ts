@@ -1,7 +1,11 @@
-import Choices from "./components/Choices";
+import WeightedChoices from "./components/WeightedChoices";
 
 function App() {
-  return <Choices />;
+  return (
+    <div>
+      <WeightedChoices />
+    </div>
+  );
 }
 
 export default App;

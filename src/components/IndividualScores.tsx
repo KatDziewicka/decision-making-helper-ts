@@ -1,4 +1,5 @@
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { calculateScore } from "../utils/calculateScore";
 
 enum CriterionKinds {
   TASTE = "TASTE",
@@ -6,18 +7,18 @@ enum CriterionKinds {
   HEALTHINESS = "HEALTHINESS",
 }
 
-interface CriterionAction {
+interface ScoresAction {
   type: CriterionKinds;
   newScore: string;
 }
 
-interface CriterionState {
+interface ScoresState {
   tasteScore: string;
   valueForMoneyScore: string;
   healthinessScore: string;
 }
 
-function scoreReducer(state: CriterionState, action: CriterionAction) {
+function scoreReducer(state: ScoresState, action: ScoresAction) {
   const { type, newScore } = action;
   switch (type) {
     case CriterionKinds.TASTE:
@@ -37,25 +38,45 @@ function scoreReducer(state: CriterionState, action: CriterionAction) {
       };
   }
 }
-export default function IndividualScores(): JSX.Element {
-  function calculateScore(
-    tasteScore: string,
-    valueForMoneyScore: string,
-    healthinessScore: string
-  ): number {
-    return (
-      (parseInt(state.tasteScore) +
-        parseInt(state.healthinessScore) +
-        parseInt(state.valueForMoneyScore)) /
-      3
-    );
-  }
 
+interface IndividualScoresProps {
+  tasteWeight: string;
+  valueForMoneyWeight: string;
+  healthinessWeight: string;
+}
+export default function IndividualScores({
+  tasteWeight,
+  valueForMoneyWeight,
+  healthinessWeight,
+}: IndividualScoresProps): JSX.Element {
   const [state, dispatch] = useReducer(scoreReducer, {
     tasteScore: "0",
     valueForMoneyScore: "0",
     healthinessScore: "0",
   });
+
+  const [score, setScore] = useState<number>(0);
+
+  useEffect(() => {
+    setScore(
+      calculateScore(
+        state.tasteScore,
+        tasteWeight,
+        state.healthinessScore,
+        healthinessWeight,
+        state.valueForMoneyScore,
+        valueForMoneyWeight
+      )
+    );
+  }, [state, tasteWeight, healthinessWeight, valueForMoneyWeight]);
+
+  const elements = [
+    { id: "e1-2", source: "1", target: "2", animated: true, label: "Taste" },
+    { id: "e1-2", source: "3", target: "4", animated: true, label: "Value for money" },
+    { id: "e1-2", source: "5", target: "6", animated: true, label: "Healthiness"}
+  ];
+
+  
   return (
     <div>
       <div>
@@ -72,7 +93,7 @@ export default function IndividualScores(): JSX.Element {
         ></input>
       </div>
       <div>
-        Value for money weight: {state.valueForMoneyScore}
+        Value for money score: {state.valueForMoneyScore}
         <input
           type="range"
           id="value"
@@ -88,7 +109,7 @@ export default function IndividualScores(): JSX.Element {
         ></input>
       </div>
       <div>
-        Healthiness weight: {state.healthinessScore}
+        Healthiness score: {state.healthinessScore}
         <input
           type="range"
           id="healthiness"
@@ -104,14 +125,7 @@ export default function IndividualScores(): JSX.Element {
         ></input>
       </div>
       <div>
-        <h3>
-          Score:{" "}
-          {calculateScore(
-            state.tasteScore,
-            state.valueForMoneyScore,
-            state.healthinessScore
-          )}
-        </h3>
+        <h3>Score: {parseFloat(score.toFixed(1))}</h3>
       </div>
     </div>
   );
