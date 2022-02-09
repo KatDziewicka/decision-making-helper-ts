@@ -1,12 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import BasicFlow from './components/Flow';
+import Choices from "./components/Choices";
 
 function App() {
-  return (
-    <BasicFlow />
-  );
+  return <Choices />;
 }
 
 export default App;
