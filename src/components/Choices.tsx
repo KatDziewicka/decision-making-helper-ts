@@ -1,12 +1,17 @@
-import IndividualScores from "./IndividualScores"
+import IndividualScores from "./IndividualScores";
 
-export default function Choices():JSX.Element {
-    const choices = ["Lasagne", "Chicken Wings", "Salad"]
-    
-    return <>
-     {choices.map((choice, index) => <div key={index}>
-         <h3>{choice}</h3>
-         <IndividualScores />
-     </div>)}
+export default function Choices(): JSX.Element {
+  const choices = ["Lasagne", "Chicken Wings", "Salad"];
+
+  return (
+    <>
+      {choices.map((choice, index) => (
+        <div key={index}>
+          <h3>{choice}</h3>
+          <IndividualScores />
+          <h2>Score: {}</h2>
+        </div>
+      ))}
     </>
+  );
 }
