@@ -1,15 +1,17 @@
 import { useReducer } from "react";
-import ReactFlow, {Position} from "react-flow-renderer";
+import ReactFlow, {Position, Background, BackgroundVariant, MiniMap, ConnectionLineType} from "react-flow-renderer";
 import IndividualScores from "./IndividualScores";
 import "../styles/Flow.css"
+import "../styles/WeightedChoices.css"
 import { CriterionKinds, IWeightsAction, IWeightsState, IInputState, IInputAction } from "../utils/Interfaces";
+
 
 export default function WeightedChoices(): JSX.Element {
 
   const [weightState, weightDispatch] = useReducer(weightReducer, {
-    tasteWeight: "0",
-    valueForMoneyWeight: "0",
-    healthinessWeight: "0",
+    tasteWeight: "1",
+    valueForMoneyWeight: "1",
+    healthinessWeight: "1",
   });
   //handle the changes in weighting of attributes
   function weightReducer(state: IWeightsState, action: IWeightsAction) {
@@ -66,7 +68,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
     }
   }
 
-  const [factorsState, factorsDispatch] = useReducer(choicesReducer, {
+  const [factorsState, factorsDispatch] = useReducer(factorsReducer, {
     1: "Factor 1",
     2: "Factor 2",
     3: "Factor 3"
@@ -99,7 +101,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
   }
 
   const edges = [
-    { id: 'e1', source: '0', target: 'w1'},
+    { id: 'e1', source: '0', target: 'w1', isHidden: false},
     { id: 'e2', source: '0', target: 'w2'},
     { id: 'e3', source: '0', target: 'w3'},
     { id: 'e4', source: '1', target: 'w1'},
@@ -113,9 +115,9 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
   //displaying options along with scores and sliders
   const options = Object.keys(choicesState).map((choice, index) => ({
     id: `${index}`,
-    data: {label: (<div key={index}>
+    data: {label: (<div key={index} className="choice-node">
     <h3>Option {choice}</h3>
-    <input placeholder="I might choose..." onChange={(e)=>{
+    <input className="choice-input" placeholder="I might choose..." onChange={(e)=>{
       choicesDispatch({
         type: choice,
         newInputName: e.target.value
@@ -140,7 +142,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
           type="range"
           id="taste"
           name="taste"
-          min="0"
+          min="1"
           max="5"
           onChange={(e) =>
             weightDispatch({ type: CriterionKinds.TASTE, newWeight: e.target.value })
@@ -160,7 +162,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
        type="range"
        id="value"
        name="value"
-       min="0"
+       min="1"
        max="5"
        onChange={(e) =>
          weightDispatch({
@@ -182,7 +184,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
           type="range"
           id="healthiness"
           name="healthiness"
-          min="0"
+          min="1"
           max="5"
           onChange={(e) =>
             weightDispatch({
@@ -201,7 +203,14 @@ const elements = [...edges, ...options, ...weights]
   return (      
 
   <div className="react-flow-background">
-  <ReactFlow elements={elements} />
+  <ReactFlow className="flow" elements={elements}>
+  <Background
+    variant={BackgroundVariant.Dots}
+    gap={12}
+    size={2}
+    color="#99b3ff"
+    />
+    </ReactFlow>
   </div>
   )
 }

@@ -1,0 +1,19 @@
+.topBar {
+  background-color: #668cff;
+  padding-left: 0;
+  display: flex;
+  text-align: center;
+  width: 100%;
+  flex-direction: column;
+  line-height: 0;
+}
+
+h1 {
+  color: whitesmoke;
+  justify-content: center;
+}
+
+.subheading {
+  color: whitesmoke;
+  justify-content: center;
+}

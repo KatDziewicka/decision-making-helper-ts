@@ -1,3 +1,8 @@
+import '../styles/Header.css'
+
 export default function Header(): JSX.Element {
-    return <h1>Welcome to your personal Choice Maker!</h1>
+    return (<div className="topBar">
+    <h1>Welcome to your personal choice assistant!</h1>
+    <p className="subheading">I will help you make even the toughest decisions.</p>
+    </div>)
 }
