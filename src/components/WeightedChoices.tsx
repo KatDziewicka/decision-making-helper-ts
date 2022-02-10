@@ -1,10 +1,10 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import ReactFlow from "react-flow-renderer";
 import IndividualScores from "./IndividualScores";
 import "../styles/Flow.css"
-import { CriterionKinds, WeightsAction, WeightsState, ChoicesState, ChoicesAction, Choices } from "../utils/Interfaces";
+import { CriterionKinds, IWeightsAction, IWeightsState, IChoicesState, IChoicesAction, Choices } from "../utils/Interfaces";
 
-function weightReducer(state: WeightsState, action: WeightsAction) {
+function weightReducer(state: IWeightsState, action: IWeightsAction) {
   const { type, newWeight } = action;
   switch (type) {
     case CriterionKinds.TASTE:
@@ -22,6 +22,7 @@ function weightReducer(state: WeightsState, action: WeightsAction) {
         ...state,
         healthinessWeight: newWeight,
       };
+
   }
 }
 
@@ -29,7 +30,7 @@ interface IndividualWeightsProps {
   tasteWeight: number;
 }
 
-function choicesReducer(state: ChoicesState, action: ChoicesAction) {
+function choicesReducer(state: IChoicesState, action: IChoicesAction) {
   const { type, newChoiceName } = action;
   switch (type) {
     case "first":
@@ -54,10 +55,11 @@ function choicesReducer(state: ChoicesState, action: ChoicesAction) {
   }
 }
 
+
+
 export default function WeightedChoices(): JSX.Element {
   
  
-
 const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
     1: "Lasagne",
     2: "Chicken Wings",
@@ -65,7 +67,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
   });
 
 
-  const [weightsState, dispatch] = useReducer(weightReducer, {
+  const [state, dispatch] = useReducer(weightReducer, {
     tasteWeight: "0",
     valueForMoneyWeight: "0",
     healthinessWeight: "0",
@@ -81,7 +83,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
         newChoiceName: e.target.value
       })
     }}></input>
-    <IndividualScores tasteWeight={weightsState.tasteWeight} valueForMoneyWeight={weightsState.valueForMoneyWeight} healthinessWeight={weightsState.healthinessWeight}/>
+    <IndividualScores tasteWeight={state.tasteWeight} valueForMoneyWeight={state.valueForMoneyWeight} healthinessWeight={state.healthinessWeight}/>
     </div>)},
     position: {x: 250+250*index, y: 200}}))
 
@@ -89,7 +91,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
       {id: "w1",
     data: {label:
     (<div>
-        Taste Weight: {weightsState.tasteWeight}
+        Taste Weight: {state.tasteWeight}
         <input
           className="nodrag"
           type="range"
@@ -106,7 +108,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
       {id: "w2",
       data: {label:
       (<div>
-        Value for money weight: {weightsState.valueForMoneyWeight}
+        Value for money weight: {state.valueForMoneyWeight}
         <input
         className="nodrag"
        type="range"
@@ -126,7 +128,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
         {id: "w3",
       data: {label:
       (<div>
-        Healthiness weight: {weightsState.healthinessWeight}
+        Healthiness weight: {state.healthinessWeight}
         <input
           className="nodrag"
           type="range"
@@ -148,6 +150,7 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
       const elements = options.concat(weights);
 
 
+  console.log(state);
   return (      
 
   <div className="react-flow-background">

@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import { calculateScore } from "../utils/calculateScore";
-import { CriterionKinds, ScoresAction, ScoresState } from "../utils/Interfaces";
+import { CriterionKinds, IScoresAction, IScoresState } from "../utils/Interfaces";
 import Winner from "./Winner";
 
 
@@ -21,7 +21,7 @@ export default function IndividualScores({
   });
  
   
-  function scoreReducer(state: ScoresState, action: ScoresAction) {
+  function scoreReducer(state: IScoresState, action: IScoresAction) {
     const { type, newScore } = action;
     switch (type) {
       case CriterionKinds.TASTE:
