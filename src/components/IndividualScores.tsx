@@ -1,18 +1,22 @@
 import { useEffect, useReducer, useState } from "react";
 import { calculateScore } from "../utils/calculateScore";
 import { CriterionKinds, IScoresAction, IScoresState } from "../utils/Interfaces";
-import Winner from "./Winner";
-
 
 interface IndividualScoresProps {
   tasteWeight: string;
   valueForMoneyWeight: string;
   healthinessWeight: string;
+  firstFactorName: string,
+  secondFactorName: string,
+  thirdFactorName: string
 }
 export default function IndividualScores({
   tasteWeight,
   valueForMoneyWeight,
   healthinessWeight,
+  firstFactorName,
+  secondFactorName,
+  thirdFactorName
 }: IndividualScoresProps): JSX.Element {
   const [state, dispatch] = useReducer(scoreReducer, {
     tasteScore: "0",
@@ -20,7 +24,6 @@ export default function IndividualScores({
     healthinessScore: "0",
   });
  
-  
   function scoreReducer(state: IScoresState, action: IScoresAction) {
     const { type, newScore } = action;
     switch (type) {
@@ -57,10 +60,11 @@ export default function IndividualScores({
     );
   }, [state, tasteWeight, healthinessWeight, valueForMoneyWeight]);
 
+
   return (
     <div>
       <div>
-        Taste score: {state.tasteScore}
+        {firstFactorName} score: {state.tasteScore}
         <input
           className="nodrag"
           type="range"
@@ -74,7 +78,7 @@ export default function IndividualScores({
         ></input>
       </div>
       <div>
-        Value for money score: {state.valueForMoneyScore}
+        {secondFactorName} score: {state.valueForMoneyScore}
         <input
           className="nodrag"
           type="range"
@@ -91,7 +95,7 @@ export default function IndividualScores({
         ></input>
       </div>
       <div>
-        Healthiness score: {state.healthinessScore}
+        {thirdFactorName} score: {state.healthinessScore}
         <input
           className="nodrag"
           type="range"
@@ -109,9 +113,6 @@ export default function IndividualScores({
       </div>
       <div>
         <h3>Score: {parseFloat(score.toFixed(1))}</h3>
-      </div>
-      <div>
-        <Winner score={parseFloat(score.toFixed(1))}/>
       </div>
     </div>
   );

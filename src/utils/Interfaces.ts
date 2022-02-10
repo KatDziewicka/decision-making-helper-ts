@@ -48,13 +48,13 @@ export interface IAvgScoreState {
     healthinessAvgScore: number;
   }
 
-export interface IChoicesState {
+export interface IInputState {
     1: string,
     2: string,
     3: string
 }
 
-export interface IChoicesAction {
+export interface IInputAction {
     type: string,
-    newChoiceName: string
+    newInputName: string
 }

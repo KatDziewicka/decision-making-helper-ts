@@ -1,97 +1,140 @@
 import { useReducer } from "react";
-import ReactFlow from "react-flow-renderer";
+import ReactFlow, {Position} from "react-flow-renderer";
 import IndividualScores from "./IndividualScores";
 import "../styles/Flow.css"
-import { CriterionKinds, IWeightsAction, IWeightsState, IChoicesState, IChoicesAction, Choices } from "../utils/Interfaces";
-
-function weightReducer(state: IWeightsState, action: IWeightsAction) {
-  const { type, newWeight } = action;
-  switch (type) {
-    case CriterionKinds.TASTE:
-      return {
-        ...state,
-        tasteWeight: newWeight,
-      };
-    case CriterionKinds.VALUE_FOR_MONEY:
-      return {
-        ...state,
-        valueForMoneyWeight: newWeight,
-      };
-    case CriterionKinds.HEALTHINESS:
-      return {
-        ...state,
-        healthinessWeight: newWeight,
-      };
-
-  }
-}
-
-interface IndividualWeightsProps {
-  tasteWeight: number;
-}
-
-function choicesReducer(state: IChoicesState, action: IChoicesAction) {
-  const { type, newChoiceName } = action;
-  switch (type) {
-    case "first":
-      return {
-        ...state,
-        1: newChoiceName,
-      };
-    case "second":
-      return {
-        ...state,
-        2: newChoiceName,
-      };
-    case "third":
-      return {
-        ...state,
-        3: newChoiceName,
-      };
-    default:
-      return {
-        ...state
-      }
-  }
-}
-
-
+import { CriterionKinds, IWeightsAction, IWeightsState, IInputState, IInputAction } from "../utils/Interfaces";
 
 export default function WeightedChoices(): JSX.Element {
+
+  const [weightState, weightDispatch] = useReducer(weightReducer, {
+    tasteWeight: "0",
+    valueForMoneyWeight: "0",
+    healthinessWeight: "0",
+  });
+  //handle the changes in weighting of attributes
+  function weightReducer(state: IWeightsState, action: IWeightsAction) {
+    const { type, newWeight } = action;
+    switch (type) {
+      case CriterionKinds.TASTE:
+        return {
+          ...state,
+          tasteWeight: newWeight,
+        };
+      case CriterionKinds.VALUE_FOR_MONEY:
+        return {
+          ...state,
+          valueForMoneyWeight: newWeight,
+        };
+      case CriterionKinds.HEALTHINESS:
+        return {
+          ...state,
+          healthinessWeight: newWeight,
+        };
   
- 
+    }
+  }
+  
 const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
     1: "Lasagne",
     2: "Chicken Wings",
     3: "Salad"
   });
 
+  //handle changes of choice - in preparation for creating a node with the winning choice
+  function choicesReducer(state: IInputState, action: IInputAction) {
+    const { type, newInputName } = action;
+    switch (type) {
+      case "first":
+        return {
+          ...state,
+          1: newInputName,
+        };
+      case "second":
+        return {
+          ...state,
+          2: newInputName,
+        };
+      case "third":
+        return {
+          ...state,
+          3: newInputName,
+        };
+      default:
+        return {
+          ...state
+        }
+    }
+  }
 
-  const [state, dispatch] = useReducer(weightReducer, {
-    tasteWeight: "0",
-    valueForMoneyWeight: "0",
-    healthinessWeight: "0",
+  const [factorsState, factorsDispatch] = useReducer(choicesReducer, {
+    1: "Factor 1",
+    2: "Factor 2",
+    3: "Factor 3"
   });
 
+  //handle changes of choice - in preparation for creating a node with the winning choice
+  function factorsReducer(state: IInputState, action: IInputAction) {
+    const { type, newInputName } = action;
+    switch (type) {
+      case "first":
+        return {
+          ...state,
+          1: newInputName,
+        };
+      case "second":
+        return {
+          ...state,
+          2: newInputName,
+        };
+      case "third":
+        return {
+          ...state,
+          3: newInputName,
+        };
+      default:
+        return {
+          ...state
+        }
+    }
+  }
+
+  const edges = [
+    { id: 'e1', source: '0', target: 'w1'},
+    { id: 'e2', source: '0', target: 'w2'},
+    { id: 'e3', source: '0', target: 'w3'},
+    { id: 'e4', source: '1', target: 'w1'},
+    { id: 'e5', source: '1', target: 'w2'},
+    { id: 'e6', source: '1', target: 'w3'},
+    { id: 'e7', source: '2', target: 'w1'},
+    { id: 'e8', source: '2', target: 'w2'},
+    { id: 'e9', source: '2', target: 'w3'}
+  ]
+
+  //displaying options along with scores and sliders
   const options = Object.keys(choicesState).map((choice, index) => ({
     id: `${index}`,
     data: {label: (<div key={index}>
-    <h3>{choice}</h3>
-    <input onChange={(e)=>{
+    <h3>Option {choice}</h3>
+    <input placeholder="I might choose..." onChange={(e)=>{
       choicesDispatch({
         type: choice,
-        newChoiceName: e.target.value
+        newInputName: e.target.value
       })
     }}></input>
-    <IndividualScores tasteWeight={state.tasteWeight} valueForMoneyWeight={state.valueForMoneyWeight} healthinessWeight={state.healthinessWeight}/>
+    <IndividualScores firstFactorName={factorsState[1]} secondFactorName={factorsState[2]} thirdFactorName={factorsState[3]} tasteWeight={weightState.tasteWeight} valueForMoneyWeight={weightState.valueForMoneyWeight} healthinessWeight={weightState.healthinessWeight}/>
     </div>)},
+    sourcePosition: Position.Top,
     position: {x: 250+250*index, y: 200}}))
 
     const weights = [
       {id: "w1",
     data: {label:
     (<div>
-        Taste Weight: {state.tasteWeight}
+        <input className="factor-input" placeholder="Factor 1" onChange={(e) => factorsDispatch({
+          type: "first",
+          newInputName: e.target.value
+        })}></input>
+        <p>Weight: {weightState.tasteWeight}</p>
         <input
           className="nodrag"
           type="range"
@@ -100,15 +143,18 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
           min="0"
           max="5"
           onChange={(e) =>
-            dispatch({ type: CriterionKinds.TASTE, newWeight: e.target.value })
+            weightDispatch({ type: CriterionKinds.TASTE, newWeight: e.target.value })
           }
         ></input>
       </div>)},
-      position: {x: 250, y: 5}},
+      targetPosition: Position.Bottom,
+      position: {x: 250, y: 5}
+    },
       {id: "w2",
       data: {label:
       (<div>
-        Value for money weight: {state.valueForMoneyWeight}
+        <input className="factor-input" placeholder="Factor 2"></input>
+        <p>Weight: {weightState.valueForMoneyWeight}</p>
         <input
         className="nodrag"
        type="range"
@@ -117,18 +163,20 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
        min="0"
        max="5"
        onChange={(e) =>
-         dispatch({
+         weightDispatch({
            type: CriterionKinds.VALUE_FOR_MONEY,
            newWeight: e.target.value,
          })
        }
       ></input>
       </div>)},
+            targetPosition: Position.Bottom,
         position: {x: 500, y: 5}},
         {id: "w3",
       data: {label:
       (<div>
-        Healthiness weight: {state.healthinessWeight}
+        <input className="factor-input" placeholder="Factor 3"></input>
+        <p>Weight: {weightState.healthinessWeight}</p>
         <input
           className="nodrag"
           type="range"
@@ -137,20 +185,19 @@ const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
           min="0"
           max="5"
           onChange={(e) =>
-            dispatch({
+            weightDispatch({
               type: CriterionKinds.HEALTHINESS,
               newWeight: e.target.value,
             })
           }
         ></input>
       </div>)},
+      targetPosition: Position.Bottom,
         position: {x: 750, y: 5}}]
 
+const elements = [...edges, ...options, ...weights]
 
-      const elements = options.concat(weights);
 
-
-  console.log(state);
   return (      
 
   <div className="react-flow-background">
