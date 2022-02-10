@@ -1,43 +1,8 @@
 import { useEffect, useReducer, useState } from "react";
 import { calculateScore } from "../utils/calculateScore";
+import { CriterionKinds, ScoresAction, ScoresState } from "../utils/Interfaces";
+import Winner from "./Winner";
 
-enum CriterionKinds {
-  TASTE = "TASTE",
-  VALUE_FOR_MONEY = "VALUE FOR MONEY",
-  HEALTHINESS = "HEALTHINESS",
-}
-
-interface ScoresAction {
-  type: CriterionKinds;
-  newScore: string;
-}
-
-interface ScoresState {
-  tasteScore: string;
-  valueForMoneyScore: string;
-  healthinessScore: string;
-}
-
-function scoreReducer(state: ScoresState, action: ScoresAction) {
-  const { type, newScore } = action;
-  switch (type) {
-    case CriterionKinds.TASTE:
-      return {
-        ...state,
-        tasteScore: newScore,
-      };
-    case CriterionKinds.VALUE_FOR_MONEY:
-      return {
-        ...state,
-        valueForMoneyScore: newScore,
-      };
-    case CriterionKinds.HEALTHINESS:
-      return {
-        ...state,
-        healthinessScore: newScore,
-      };
-  }
-}
 
 interface IndividualScoresProps {
   tasteWeight: string;
@@ -54,6 +19,28 @@ export default function IndividualScores({
     valueForMoneyScore: "0",
     healthinessScore: "0",
   });
+ 
+  
+  function scoreReducer(state: ScoresState, action: ScoresAction) {
+    const { type, newScore } = action;
+    switch (type) {
+      case CriterionKinds.TASTE:
+        return {
+          ...state,
+          tasteScore: newScore,
+        };
+      case CriterionKinds.VALUE_FOR_MONEY:
+        return {
+          ...state,
+          valueForMoneyScore: newScore,
+        };
+      case CriterionKinds.HEALTHINESS:
+        return {
+          ...state,
+          healthinessScore: newScore,
+        };
+    }
+  }
 
   const [score, setScore] = useState<number>(0);
 
@@ -70,18 +57,12 @@ export default function IndividualScores({
     );
   }, [state, tasteWeight, healthinessWeight, valueForMoneyWeight]);
 
-  const elements = [
-    { id: "e1-2", source: "1", target: "2", animated: true, label: "Taste" },
-    { id: "e1-2", source: "3", target: "4", animated: true, label: "Value for money" },
-    { id: "e1-2", source: "5", target: "6", animated: true, label: "Healthiness"}
-  ];
-
-  
   return (
     <div>
       <div>
         Taste score: {state.tasteScore}
         <input
+          className="nodrag"
           type="range"
           id="taste"
           name="taste"
@@ -95,6 +76,7 @@ export default function IndividualScores({
       <div>
         Value for money score: {state.valueForMoneyScore}
         <input
+          className="nodrag"
           type="range"
           id="value"
           name="value"
@@ -111,6 +93,7 @@ export default function IndividualScores({
       <div>
         Healthiness score: {state.healthinessScore}
         <input
+          className="nodrag"
           type="range"
           id="healthiness"
           name="healthiness"
@@ -126,6 +109,9 @@ export default function IndividualScores({
       </div>
       <div>
         <h3>Score: {parseFloat(score.toFixed(1))}</h3>
+      </div>
+      <div>
+        <Winner score={parseFloat(score.toFixed(1))}/>
       </div>
     </div>
   );

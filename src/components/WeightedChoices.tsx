@@ -1,22 +1,8 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
+import ReactFlow from "react-flow-renderer";
 import IndividualScores from "./IndividualScores";
-
-enum CriterionKinds {
-  TASTE = "TASTE",
-  VALUE_FOR_MONEY = "VALUE FOR MONEY",
-  HEALTHINESS = "HEALTHINESS",
-}
-
-interface WeightsAction {
-  type: CriterionKinds;
-  newWeight: string;
-}
-
-interface WeightsState {
-  tasteWeight: string;
-  valueForMoneyWeight: string;
-  healthinessWeight: string;
-}
+import "../styles/Flow.css"
+import { CriterionKinds, WeightsAction, WeightsState, ChoicesState, ChoicesAction, Choices } from "../utils/Interfaces";
 
 function weightReducer(state: WeightsState, action: WeightsAction) {
   const { type, newWeight } = action;
@@ -43,21 +29,69 @@ interface IndividualWeightsProps {
   tasteWeight: number;
 }
 
-export default function WeightedChoices(): JSX.Element {
-  const choices = ["Lasagne", "Chicken Wings", "Salad"];
+function choicesReducer(state: ChoicesState, action: ChoicesAction) {
+  const { type, newChoiceName } = action;
+  switch (type) {
+    case "first":
+      return {
+        ...state,
+        1: newChoiceName,
+      };
+    case "second":
+      return {
+        ...state,
+        2: newChoiceName,
+      };
+    case "third":
+      return {
+        ...state,
+        3: newChoiceName,
+      };
+    default:
+      return {
+        ...state
+      }
+  }
+}
 
-  const [state, dispatch] = useReducer(weightReducer, {
+export default function WeightedChoices(): JSX.Element {
+  
+ 
+
+const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
+    1: "Lasagne",
+    2: "Chicken Wings",
+    3: "Salad"
+  });
+
+
+  const [weightsState, dispatch] = useReducer(weightReducer, {
     tasteWeight: "0",
     valueForMoneyWeight: "0",
     healthinessWeight: "0",
   });
 
-  console.log(state);
-  return (
-    <div>
-      <div>
-        Taste Weight: {state.tasteWeight}
+  const options = Object.keys(choicesState).map((choice, index) => ({
+    id: `${index}`,
+    data: {label: (<div key={index}>
+    <h3>{choice}</h3>
+    <input onChange={(e)=>{
+      choicesDispatch({
+        type: choice,
+        newChoiceName: e.target.value
+      })
+    }}></input>
+    <IndividualScores tasteWeight={weightsState.tasteWeight} valueForMoneyWeight={weightsState.valueForMoneyWeight} healthinessWeight={weightsState.healthinessWeight}/>
+    </div>)},
+    position: {x: 250+250*index, y: 200}}))
+
+    const weights = [
+      {id: "w1",
+    data: {label:
+    (<div>
+        Taste Weight: {weightsState.tasteWeight}
         <input
+          className="nodrag"
           type="range"
           id="taste"
           name="taste"
@@ -67,26 +101,34 @@ export default function WeightedChoices(): JSX.Element {
             dispatch({ type: CriterionKinds.TASTE, newWeight: e.target.value })
           }
         ></input>
-      </div>
-      <div>
-        Value for money weight: {state.valueForMoneyWeight}
+      </div>)},
+      position: {x: 250, y: 5}},
+      {id: "w2",
+      data: {label:
+      (<div>
+        Value for money weight: {weightsState.valueForMoneyWeight}
         <input
-          type="range"
-          id="value"
-          name="value"
-          min="0"
-          max="5"
-          onChange={(e) =>
-            dispatch({
-              type: CriterionKinds.VALUE_FOR_MONEY,
-              newWeight: e.target.value,
-            })
-          }
-        ></input>
-      </div>
-      <div>
-        Healthiness weight: {state.healthinessWeight}
+        className="nodrag"
+       type="range"
+       id="value"
+       name="value"
+       min="0"
+       max="5"
+       onChange={(e) =>
+         dispatch({
+           type: CriterionKinds.VALUE_FOR_MONEY,
+           newWeight: e.target.value,
+         })
+       }
+      ></input>
+      </div>)},
+        position: {x: 500, y: 5}},
+        {id: "w3",
+      data: {label:
+      (<div>
+        Healthiness weight: {weightsState.healthinessWeight}
         <input
+          className="nodrag"
           type="range"
           id="healthiness"
           name="healthiness"
@@ -99,20 +141,18 @@ export default function WeightedChoices(): JSX.Element {
             })
           }
         ></input>
-      </div>
-      <div>
-        {choices.map((choice, index) => (
-          <div key={index}>
-            <h3>{choice}</h3>
-            <IndividualScores
-              tasteWeight={state.tasteWeight}
-              valueForMoneyWeight={state.valueForMoneyWeight}
-              healthinessWeight={state.healthinessWeight}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+      </div>)},
+        position: {x: 750, y: 5}}]
+
+
+      const elements = options.concat(weights);
+
+
+  return (      
+
+  <div className="react-flow-background">
+  <ReactFlow elements={elements} />
+  </div>
+  )
 }
 
