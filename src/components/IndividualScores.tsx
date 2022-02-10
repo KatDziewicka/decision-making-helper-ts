@@ -1,66 +1,75 @@
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { calculateScore } from "../utils/calculateScore";
+import {
+  CriterionKinds,
+  IScoresAction,
+  IScoresState,
+} from "../utils/Interfaces";
 
-enum CriterionKinds {
-  TASTE = "TASTE",
-  VALUE_FOR_MONEY = "VALUE FOR MONEY",
-  HEALTHINESS = "HEALTHINESS",
+interface IndividualScoresProps {
+  tasteWeight: string;
+  valueForMoneyWeight: string;
+  healthinessWeight: string;
+  firstFactorName: string;
+  secondFactorName: string;
+  thirdFactorName: string;
 }
-
-interface CriterionAction {
-  type: CriterionKinds;
-  newScore: string;
-}
-
-interface CriterionState {
-  tasteScore: string;
-  valueForMoneyScore: string;
-  healthinessScore: string;
-}
-
-function scoreReducer(state: CriterionState, action: CriterionAction) {
-  const { type, newScore } = action;
-  switch (type) {
-    case CriterionKinds.TASTE:
-      return {
-        ...state,
-        tasteScore: newScore,
-      };
-    case CriterionKinds.VALUE_FOR_MONEY:
-      return {
-        ...state,
-        valueForMoneyScore: newScore,
-      };
-    case CriterionKinds.HEALTHINESS:
-      return {
-        ...state,
-        healthinessScore: newScore,
-      };
-  }
-}
-export default function IndividualScores(): JSX.Element {
-  function calculateScore(
-    tasteScore: string,
-    valueForMoneyScore: string,
-    healthinessScore: string
-  ): number {
-    return (
-      (parseInt(state.tasteScore) +
-        parseInt(state.healthinessScore) +
-        parseInt(state.valueForMoneyScore)) /
-      3
-    );
-  }
-
+export default function IndividualScores({
+  tasteWeight,
+  valueForMoneyWeight,
+  healthinessWeight,
+  firstFactorName,
+  secondFactorName,
+  thirdFactorName,
+}: IndividualScoresProps): JSX.Element {
   const [state, dispatch] = useReducer(scoreReducer, {
     tasteScore: "0",
     valueForMoneyScore: "0",
     healthinessScore: "0",
   });
+
+  function scoreReducer(state: IScoresState, action: IScoresAction) {
+    const { type, newScore } = action;
+    switch (type) {
+      case CriterionKinds.TASTE:
+        return {
+          ...state,
+          tasteScore: newScore,
+        };
+      case CriterionKinds.VALUE_FOR_MONEY:
+        return {
+          ...state,
+          valueForMoneyScore: newScore,
+        };
+      case CriterionKinds.HEALTHINESS:
+        return {
+          ...state,
+          healthinessScore: newScore,
+        };
+    }
+  }
+
+  const [score, setScore] = useState<number>(0);
+
+  useEffect(() => {
+    setScore(
+      calculateScore(
+        state.tasteScore,
+        tasteWeight,
+        state.healthinessScore,
+        healthinessWeight,
+        state.valueForMoneyScore,
+        valueForMoneyWeight
+      )
+    );
+  }, [state, tasteWeight, healthinessWeight, valueForMoneyWeight]);
+
   return (
     <div>
       <div>
-        Taste score: {state.tasteScore}
+        {firstFactorName} score: {state.tasteScore}
         <input
+          className="nodrag"
           type="range"
           id="taste"
           name="taste"
@@ -72,8 +81,9 @@ export default function IndividualScores(): JSX.Element {
         ></input>
       </div>
       <div>
-        Value for money weight: {state.valueForMoneyScore}
+        {secondFactorName} score: {state.valueForMoneyScore}
         <input
+          className="nodrag"
           type="range"
           id="value"
           name="value"
@@ -88,8 +98,9 @@ export default function IndividualScores(): JSX.Element {
         ></input>
       </div>
       <div>
-        Healthiness weight: {state.healthinessScore}
+        {thirdFactorName} score: {state.healthinessScore}
         <input
+          className="nodrag"
           type="range"
           id="healthiness"
           name="healthiness"
@@ -104,14 +115,7 @@ export default function IndividualScores(): JSX.Element {
         ></input>
       </div>
       <div>
-        <h3>
-          Score:{" "}
-          {calculateScore(
-            state.tasteScore,
-            state.valueForMoneyScore,
-            state.healthinessScore
-          )}
-        </h3>
+        <h3>Score: {parseFloat(score.toFixed(1))}</h3>
       </div>
     </div>
   );

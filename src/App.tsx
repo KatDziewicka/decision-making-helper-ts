@@ -1,7 +1,13 @@
-import Choices from "./components/Choices";
+import Header from "./components/Header";
+import WeightedChoices from "./components/WeightedChoices";
 
 function App() {
-  return <Choices />;
+  return (
+    <div>
+      <Header />
+      <WeightedChoices />
+    </div>
+  );
 }
 
 export default App;
