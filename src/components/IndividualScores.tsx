@@ -1,14 +1,18 @@
 import { useEffect, useReducer, useState } from "react";
 import { calculateScore } from "../utils/calculateScore";
-import { CriterionKinds, IScoresAction, IScoresState } from "../utils/Interfaces";
+import {
+  CriterionKinds,
+  IScoresAction,
+  IScoresState,
+} from "../utils/Interfaces";
 
 interface IndividualScoresProps {
   tasteWeight: string;
   valueForMoneyWeight: string;
   healthinessWeight: string;
-  firstFactorName: string,
-  secondFactorName: string,
-  thirdFactorName: string
+  firstFactorName: string;
+  secondFactorName: string;
+  thirdFactorName: string;
 }
 export default function IndividualScores({
   tasteWeight,
@@ -16,14 +20,14 @@ export default function IndividualScores({
   healthinessWeight,
   firstFactorName,
   secondFactorName,
-  thirdFactorName
+  thirdFactorName,
 }: IndividualScoresProps): JSX.Element {
   const [state, dispatch] = useReducer(scoreReducer, {
     tasteScore: "0",
     valueForMoneyScore: "0",
     healthinessScore: "0",
   });
- 
+
   function scoreReducer(state: IScoresState, action: IScoresAction) {
     const { type, newScore } = action;
     switch (type) {
@@ -59,7 +63,6 @@ export default function IndividualScores({
       )
     );
   }, [state, tasteWeight, healthinessWeight, valueForMoneyWeight]);
-
 
   return (
     <div>

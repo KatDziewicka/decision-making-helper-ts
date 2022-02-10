@@ -6,9 +6,13 @@ export function calculateScore(
   valueForMoneyScore: string,
   valueForMoneyWeight: string
 ): number {
-    if (parseInt(tasteWeight)===0 || parseInt(healthinessWeight)===0 || parseInt(valueForMoneyWeight)===0){
-        return 0
-    }
+  if (
+    parseInt(tasteWeight) === 0 ||
+    parseInt(healthinessWeight) === 0 ||
+    parseInt(valueForMoneyWeight) === 0
+  ) {
+    return 0;
+  }
 
   return (
     (parseInt(tasteScore) * parseInt(tasteWeight) +
