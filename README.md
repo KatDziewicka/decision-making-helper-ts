@@ -15,3 +15,5 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 A deployed version of the project is available: [https://choice-assistant.netlify.app/](https://choice-assistant.netlify.app/).
+
+The project uses the React Flow library, access docs here: [https://reactflow.dev/](https://reactflow.dev/).

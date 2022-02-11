@@ -196,7 +196,7 @@ export default function WeightedChoices(): JSX.Element {
           <div>
             <input
               className="factor-input"
-              placeholder="Factor 1"
+              placeholder="Factor 2"
               onChange={(e) =>
                 factorsDispatch({
                   type: "second",
@@ -232,7 +232,7 @@ export default function WeightedChoices(): JSX.Element {
           <div>
             <input
               className="factor-input"
-              placeholder="Factor 1"
+              placeholder="Factor 3"
               onChange={(e) =>
                 factorsDispatch({
                   type: "third",
