@@ -17,36 +17,36 @@ import {
 
 export default function WeightedChoices(): JSX.Element {
   const [weightState, weightDispatch] = useReducer(weightReducer, {
-    tasteWeight: "1",
-    valueForMoneyWeight: "1",
-    healthinessWeight: "1",
+    firstFactorWeight: "1",
+    secondFactorWeight: "1",
+    thirdFactorWeight: "1",
   });
   //handle the changes in weighting of attributes
   function weightReducer(state: IWeightsState, action: IWeightsAction) {
     const { type, newWeight } = action;
     switch (type) {
-      case CriterionKinds.TASTE:
+      case CriterionKinds.ONE:
         return {
           ...state,
-          tasteWeight: newWeight,
+          firstFactorWeight: newWeight,
         };
-      case CriterionKinds.VALUE_FOR_MONEY:
+      case CriterionKinds.TWO:
         return {
           ...state,
-          valueForMoneyWeight: newWeight,
+          secondFactorWeight: newWeight,
         };
-      case CriterionKinds.HEALTHINESS:
+      case CriterionKinds.THREE:
         return {
           ...state,
-          healthinessWeight: newWeight,
+          thirdFactorWeight: newWeight,
         };
     }
   }
 
   const [choicesState, choicesDispatch] = useReducer(choicesReducer, {
-    1: "Lasagne",
-    2: "Chicken Wings",
-    3: "Salad",
+    1: "Option 1",
+    2: "Option 2",
+    3: "Option 3",
   });
 
   //handle changes of choice - in preparation for creating a node with the winning choice
@@ -109,7 +109,7 @@ export default function WeightedChoices(): JSX.Element {
 
   //array with info on "edges" - the connectors in React Flow
   const edges = [
-    { id: "e1", source: "0", target: "w1", isHidden: false },
+    { id: "e1", source: "0", target: "w1" },
     { id: "e2", source: "0", target: "w2" },
     { id: "e3", source: "0", target: "w3" },
     { id: "e4", source: "1", target: "w1" },
@@ -141,9 +141,9 @@ export default function WeightedChoices(): JSX.Element {
             firstFactorName={factorsState[1]}
             secondFactorName={factorsState[2]}
             thirdFactorName={factorsState[3]}
-            tasteWeight={weightState.tasteWeight}
-            valueForMoneyWeight={weightState.valueForMoneyWeight}
-            healthinessWeight={weightState.healthinessWeight}
+            firstFactorWeight={weightState.firstFactorWeight}
+            secondFactorWeight={weightState.secondFactorWeight}
+            thirdFactorWeight={weightState.thirdFactorWeight}
           />
         </div>
       ),
@@ -168,7 +168,7 @@ export default function WeightedChoices(): JSX.Element {
                 })
               }
             ></input>
-            <p>Weight: {weightState.tasteWeight}</p>
+            <p>Weight: {weightState.firstFactorWeight}</p>
             <input
               className="nodrag"
               type="range"
@@ -178,7 +178,7 @@ export default function WeightedChoices(): JSX.Element {
               max="5"
               onChange={(e) =>
                 weightDispatch({
-                  type: CriterionKinds.TASTE,
+                  type: CriterionKinds.ONE,
                   newWeight: e.target.value,
                 })
               }
@@ -196,7 +196,7 @@ export default function WeightedChoices(): JSX.Element {
           <div>
             <input
               className="factor-input"
-              placeholder="Factor 1"
+              placeholder="Factor 2"
               onChange={(e) =>
                 factorsDispatch({
                   type: "second",
@@ -204,7 +204,7 @@ export default function WeightedChoices(): JSX.Element {
                 })
               }
             ></input>
-            <p>Weight: {weightState.valueForMoneyWeight}</p>
+            <p>Weight: {weightState.secondFactorWeight}</p>
             <input
               className="nodrag"
               type="range"
@@ -214,7 +214,7 @@ export default function WeightedChoices(): JSX.Element {
               max="5"
               onChange={(e) =>
                 weightDispatch({
-                  type: CriterionKinds.VALUE_FOR_MONEY,
+                  type: CriterionKinds.TWO,
                   newWeight: e.target.value,
                 })
               }
@@ -232,7 +232,7 @@ export default function WeightedChoices(): JSX.Element {
           <div>
             <input
               className="factor-input"
-              placeholder="Factor 1"
+              placeholder="Factor 3"
               onChange={(e) =>
                 factorsDispatch({
                   type: "third",
@@ -240,7 +240,7 @@ export default function WeightedChoices(): JSX.Element {
                 })
               }
             ></input>
-            <p>Weight: {weightState.healthinessWeight}</p>
+            <p>Weight: {weightState.thirdFactorWeight}</p>
             <input
               className="nodrag"
               type="range"
@@ -250,7 +250,7 @@ export default function WeightedChoices(): JSX.Element {
               max="5"
               onChange={(e) =>
                 weightDispatch({
-                  type: CriterionKinds.HEALTHINESS,
+                  type: CriterionKinds.THREE,
                   newWeight: e.target.value,
                 })
               }

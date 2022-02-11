@@ -1,25 +1,23 @@
 export function calculateScore(
-  tasteScore: string,
-  tasteWeight: string,
-  healthinessScore: string,
-  healthinessWeight: string,
-  valueForMoneyScore: string,
-  valueForMoneyWeight: string
+  firstScore: string,
+  firstWeight: string,
+  secondScore: string,
+  secondWeight: string,
+  thirdScore: string,
+  thirdWeight: string
 ): number {
   if (
-    parseInt(tasteWeight) === 0 ||
-    parseInt(healthinessWeight) === 0 ||
-    parseInt(valueForMoneyWeight) === 0
+    parseInt(firstWeight) === 0 ||
+    parseInt(secondWeight) === 0 ||
+    parseInt(thirdWeight) === 0
   ) {
     return 0;
   }
 
   return (
-    (parseInt(tasteScore) * parseInt(tasteWeight) +
-      parseInt(healthinessScore) * parseInt(healthinessWeight) +
-      parseInt(valueForMoneyScore) * parseInt(valueForMoneyWeight)) /
-    (parseInt(tasteWeight) +
-      parseInt(valueForMoneyWeight) +
-      parseInt(healthinessWeight))
+    (parseInt(firstScore) * parseInt(firstWeight) +
+      parseInt(secondScore) * parseInt(secondWeight) +
+      parseInt(thirdScore) * parseInt(thirdWeight)) /
+    (parseInt(firstWeight) + parseInt(secondWeight) + parseInt(thirdWeight))
   );
 }
