@@ -1,19 +1,13 @@
 export enum CriterionKinds {
-  TASTE = "TASTE",
-  VALUE_FOR_MONEY = "VALUE FOR MONEY",
-  HEALTHINESS = "HEALTHINESS",
-}
-
-export enum Categories {
-  LASAGNE = "LASAGNE",
-  CHICKEN_WINGS = "CHICKEN WINGS",
-  SALAD = "SALAD",
+  ONE = "ONE",
+  TWO = "TWO",
+  THREE = "THREE",
 }
 
 export enum Choices {
-  first = "FIRST",
-  second = "SECOND",
-  third = "THIRD",
+  FIRST = "FIRST",
+  SECOND = "SECOND",
+  THIRD = "THIRD",
 }
 export interface IWeightsAction {
   type: CriterionKinds;
@@ -21,9 +15,9 @@ export interface IWeightsAction {
 }
 
 export interface IWeightsState {
-  tasteWeight: string;
-  valueForMoneyWeight: string;
-  healthinessWeight: string;
+  firstFactorWeight: string;
+  secondFactorWeight: string;
+  thirdFactorWeight: string;
 }
 
 export interface IScoresAction {
@@ -32,20 +26,9 @@ export interface IScoresAction {
 }
 
 export interface IScoresState {
-  tasteScore: string;
-  valueForMoneyScore: string;
-  healthinessScore: string;
-}
-
-export interface IAvgScoreAction {
-  type: Categories;
-  newAvgScore: number;
-}
-
-export interface IAvgScoreState {
-  tasteAvgScore: number;
-  valueForMoneyAvgScore: number;
-  healthinessAvgScore: number;
+  firstFactorScore: string;
+  secondFactorScore: string;
+  thirdFactorScore: string;
 }
 
 export interface IInputState {

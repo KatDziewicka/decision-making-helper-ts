@@ -7,44 +7,44 @@ import {
 } from "../utils/Interfaces";
 
 interface IndividualScoresProps {
-  tasteWeight: string;
-  valueForMoneyWeight: string;
-  healthinessWeight: string;
+  firstFactorWeight: string;
+  secondFactorWeight: string;
+  thirdFactorWeight: string;
   firstFactorName: string;
   secondFactorName: string;
   thirdFactorName: string;
 }
 export default function IndividualScores({
-  tasteWeight,
-  valueForMoneyWeight,
-  healthinessWeight,
+  firstFactorWeight,
+  secondFactorWeight,
+  thirdFactorWeight,
   firstFactorName,
   secondFactorName,
   thirdFactorName,
 }: IndividualScoresProps): JSX.Element {
   const [state, dispatch] = useReducer(scoreReducer, {
-    tasteScore: "0",
-    valueForMoneyScore: "0",
-    healthinessScore: "0",
+    firstFactorScore: "0",
+    secondFactorScore: "0",
+    thirdFactorScore: "0",
   });
 
   function scoreReducer(state: IScoresState, action: IScoresAction) {
     const { type, newScore } = action;
     switch (type) {
-      case CriterionKinds.TASTE:
+      case CriterionKinds.ONE:
         return {
           ...state,
-          tasteScore: newScore,
+          firstFactorScore: newScore,
         };
-      case CriterionKinds.VALUE_FOR_MONEY:
+      case CriterionKinds.TWO:
         return {
           ...state,
-          valueForMoneyScore: newScore,
+          secondFactorScore: newScore,
         };
-      case CriterionKinds.HEALTHINESS:
+      case CriterionKinds.THREE:
         return {
           ...state,
-          healthinessScore: newScore,
+          thirdFactorScore: newScore,
         };
     }
   }
@@ -54,20 +54,20 @@ export default function IndividualScores({
   useEffect(() => {
     setScore(
       calculateScore(
-        state.tasteScore,
-        tasteWeight,
-        state.healthinessScore,
-        healthinessWeight,
-        state.valueForMoneyScore,
-        valueForMoneyWeight
+        state.firstFactorScore,
+        firstFactorWeight,
+        state.secondFactorScore,
+        secondFactorWeight,
+        state.thirdFactorScore,
+        thirdFactorWeight
       )
     );
-  }, [state, tasteWeight, healthinessWeight, valueForMoneyWeight]);
+  }, [state, firstFactorWeight, secondFactorWeight, thirdFactorWeight]);
 
   return (
     <div>
       <div>
-        {firstFactorName} score: {state.tasteScore}
+        {firstFactorName} score: {state.firstFactorScore}
         <input
           className="nodrag"
           type="range"
@@ -76,12 +76,12 @@ export default function IndividualScores({
           min="0"
           max="100"
           onChange={(e) =>
-            dispatch({ type: CriterionKinds.TASTE, newScore: e.target.value })
+            dispatch({ type: CriterionKinds.ONE, newScore: e.target.value })
           }
         ></input>
       </div>
       <div>
-        {secondFactorName} score: {state.valueForMoneyScore}
+        {secondFactorName} score: {state.secondFactorScore}
         <input
           className="nodrag"
           type="range"
@@ -91,14 +91,14 @@ export default function IndividualScores({
           max="100"
           onChange={(e) =>
             dispatch({
-              type: CriterionKinds.VALUE_FOR_MONEY,
+              type: CriterionKinds.TWO,
               newScore: e.target.value,
             })
           }
         ></input>
       </div>
       <div>
-        {thirdFactorName} score: {state.healthinessScore}
+        {thirdFactorName} score: {state.thirdFactorScore}
         <input
           className="nodrag"
           type="range"
@@ -108,7 +108,7 @@ export default function IndividualScores({
           max="100"
           onChange={(e) =>
             dispatch({
-              type: CriterionKinds.HEALTHINESS,
+              type: CriterionKinds.THREE,
               newScore: e.target.value,
             })
           }
