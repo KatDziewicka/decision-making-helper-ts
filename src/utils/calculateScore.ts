@@ -18,7 +18,6 @@ export function calculateScore(
     (parseInt(firstScore) * parseInt(firstWeight) +
       parseInt(secondScore) * parseInt(secondWeight) +
       parseInt(thirdScore) * parseInt(thirdWeight)) /
-    (parseInt(firstWeight) +
-      parseInt(secondWeight) + parseInt(thirdWeight))
+    (parseInt(firstWeight) + parseInt(secondWeight) + parseInt(thirdWeight))
   );
 }
