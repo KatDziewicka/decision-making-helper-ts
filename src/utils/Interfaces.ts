@@ -4,11 +4,6 @@ export enum CriterionKinds {
   THREE = "THREE",
 }
 
-export enum Choices {
-  FIRST = "FIRST",
-  SECOND = "SECOND",
-  THIRD = "THIRD",
-}
 export interface IWeightsAction {
   type: CriterionKinds;
   newWeight: string;
