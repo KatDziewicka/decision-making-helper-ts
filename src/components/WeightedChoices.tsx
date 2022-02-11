@@ -107,6 +107,7 @@ export default function WeightedChoices(): JSX.Element {
     }
   }
 
+  //array with info on "edges" - the connectors in React Flow
   const edges = [
     { id: "e1", source: "0", target: "w1", isHidden: false },
     { id: "e2", source: "0", target: "w2" },
